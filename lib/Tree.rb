@@ -151,9 +151,28 @@ class Tree
         end
       end
     end
+
+    def level_order_using_loops
+      return [] if @root.nil?
+      queue = [@root]
+      result = []
+      #Using Loops
+      while !queue.empty?
+        node = queue.shift
+        if block_given?
+          yield node.value
+        else
+          result << node.value
+        end
+        queue << node.left if !node.left.nil?
+        queue << node.right if !node.right.nil?
+      end
+      return result unless block_given?
+    end
 end
 
 tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
 tree.delete(4)
 tree.pretty_print
 p tree.find(5)
+p tree.level_order_using_loops
