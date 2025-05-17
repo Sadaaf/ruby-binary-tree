@@ -91,20 +91,26 @@ class Tree
           last_node = current
           current = current.left
         else
+          target_node_on_left = true if !last_node.left.nil? && last_node.left == current 
           left_child = current.left
           right_child = current.right
           if !left_child.nil? && !right_child.nil?
             p "HAS Both Child"
           elsif !left_child.nil? || !right_child.nil?
             p "Has One Child"
+            if target_node_on_left
+              last_node.left = left_child || right_child
+            else
+              last_node.right = left_child || right_child
+            end
           else
-            if !last_node.left.nil? && last_node.left == current 
+            if target_node_on_left
               last_node.left = nil
             else
               last_node.right = nil
             end
-            break 
           end
+          break 
         end
       end
     end
