@@ -138,8 +138,22 @@ class Tree
       end
     end
 
+    def find(value)
+      current_node = @root
+      loop do
+        return current_node if current_node.value == value
+        if current_node.value > value
+          return nil if current_node.left.nil?
+          current_node = current_node.left
+        else
+          return nil if current_node.right.nil?
+          current_node = current_node.right
+        end
+      end
+    end
 end
 
 tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
 tree.delete(4)
 tree.pretty_print
+p tree.find(5)
