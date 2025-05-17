@@ -93,16 +93,39 @@ class Tree
         else
           target_node_on_left = true if !last_node.left.nil? && last_node.left == current 
           left_child = current.left
+          left_subtree = current.left
+          right_subtree = current.right
           right_child = current.right
+          leaf_node = current
           if !left_child.nil? && !right_child.nil?
-            p "HAS Both Child"
+            loop do
+              if !right_child.left.nil?
+                leaf_node = right_child
+                right_child = right_child.left
+              else
+                if @root == current
+                  @root = right_child
+                elsif target_node_on_left
+                  last_node.left = right_child
+                else
+                  last_node.right = right_child
+                end
+                leaf_node.left = nil
+                # Problem is Down below
+                right_child.right = right_subtree
+                right_child.left = left_subtree
+                # p current.value
+                break
+              end
+            end
+
           elsif !left_child.nil? || !right_child.nil?
-            p "Has One Child"
             if target_node_on_left
               last_node.left = left_child || right_child
             else
               last_node.right = left_child || right_child
             end
+            
           else
             if target_node_on_left
               last_node.left = nil
@@ -110,7 +133,7 @@ class Tree
               last_node.right = nil
             end
           end
-          break 
+          return current
         end
       end
     end
@@ -118,5 +141,5 @@ class Tree
 end
 
 tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
-tree.delete(5)
+tree.delete(4)
 tree.pretty_print
