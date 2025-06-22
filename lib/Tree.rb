@@ -177,12 +177,21 @@ class Tree
 
     def level_order_recursion(root, result=[])
       return [] if root.nil?
-      result << root.value
-      result << root.left.value if !root.left.nil?
-      result << root.right.value if !root.right.nil?
-      level_order_recursion(root.left,result) if !root.left.nil?
-      level_order_recursion(root.right,result) if !root.right.nil?
+      result = []
+      height = height(root)
+      (0...height).each do |level|
+        collect_level(root, level, result)
+      end
       return result
+    end
+
+    def collect_level(node, level, result)
+      if level == 0
+        result << node.value
+      else
+        collect_level(node.left, level-1, result) if !node.left.nil?
+        collect_level(node.right, level-1, result) if !node.right.nil?
+      end
     end
 end
 
