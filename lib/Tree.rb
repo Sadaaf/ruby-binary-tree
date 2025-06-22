@@ -169,10 +169,31 @@ class Tree
       end
       return result unless block_given?
     end
+
+    def height(root)
+      return 0 if root.nil?
+      [height(root.left), height(root.right)].max + 1
+    end
+
+    def level_order_recursion(root, result=[])
+      return [] if root.nil?
+      result << root.value
+      result << root.left.value if !root.left.nil?
+      result << root.right.value if !root.right.nil?
+      level_order_recursion(root.left,result) if !root.left.nil?
+      level_order_recursion(root.right,result) if !root.right.nil?
+      return result
+    end
 end
 
 tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
 tree.delete(4)
 tree.pretty_print
 p tree.find(5)
+# No Blocks passed
 p tree.level_order_using_loops
+# Passing a block
+tree.level_order_using_loops do |value|
+  puts "Visited #{value}"
+end
+p tree.level_order_recursion(tree.root)
